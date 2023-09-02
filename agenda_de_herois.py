@@ -1,13 +1,17 @@
+import string
+import csv
+
 class AgendaHeroes:
-    def __init__(self, size = 25):
+    def __init__(self, size = 26):
         self.size = size
         self.table = [None] * size
         self.total_items = 0
+        self.alphabet = list(string.ascii_lowercase)
    
-    def hash_function(self, key):
-        print("index: {} - value: {}".format(ord(key[0])% self.size, key))
-        ord_key = ord(key[0])
-        hash = ord_key % self.size
+    def hash_function(self, key, value = ''):
+        key = key.lower()
+        hash = ord(key[0]) - 97
+        print("index: {} - value: {}".format(hash, key))
         return hash
 
 
@@ -15,7 +19,12 @@ class AgendaHeroes:
             if self.total_items == self.size:
                 print("Full table")
                 return False
+
             index = self.hash_function(key)
+
+            if index >= self.size:
+                return print("Invalid Name")
+
             if self.table[index] is None:
                 self.table[index] = key
             else:
@@ -41,5 +50,12 @@ class AgendaHeroes:
         return None
 
 heroes_hash = AgendaHeroes()
+
+arquivo = open("agenda.csv", "r")
+reader = csv.reader(arquivo)
+for linha in reader:
+    heroes_hash.insert(linha[0])
+    if linha[0] == "Sophia Carter":
+        break
 
 print(heroes_hash.table)
