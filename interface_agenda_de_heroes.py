@@ -40,12 +40,14 @@ while (True):
 
     elif choice == '3':
         print("Digite a primeira letra para pesquisa: ")
+        word = input()
+        heroes_hash.searchByWord(word)
         
     elif choice == "3.1":
-        print(heroes_hash.table)
+        heroes_hash.showNames()
 
     elif choice == "3.2":
-        print(heroes_hash.numbers_table)
+        heroes_hash.showNumbers()
 
     elif choice == '4':
         print("Digite o nome do contato para excluir: ")

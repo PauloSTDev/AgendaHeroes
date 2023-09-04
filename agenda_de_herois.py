@@ -4,16 +4,14 @@ import csv
 class AgendaHeroes:
     def __init__(self, size = 26):
         self.size = size
-        self.table = [None] * size
-        self.numbers_table = [None] * size
         self.total_items = 0
-        self.alphabet = [(string.ascii_lowercase)]
+        self.hash_table = [(string.ascii_lowercase), [None] * size, [None] * size]
    
     def hash_function(self, key):
         original_name = key
         key = key.lower()
         hash = ord(key[0]) - 97
-        # print("index: {}:{} - value: {}".format(self.alphabet[hash].upper(),hash, original_name))
+        print("index: {}:{} - value: {}".format(self.hash_table[0][hash].upper(),hash, original_name))
         return hash
 
     def insert(self, key, value):
@@ -21,30 +19,30 @@ class AgendaHeroes:
                 print("Full table")
                 return False
             index = self.hash_function(key)
-            if index >= self.size:
+            if index >= self.size or index < 0:
                 return print("Invalid Name")
-            if self.table[index] is None:
-                self.table[index] = key
-                self.numbers_table[index] = value
+            if self.hash_table[1][index] is None:
+                self.hash_table[1][index] = key
+                self.hash_table[2][index] = value
                 return print("Add completed!")
             else:
-                while self.table[index] is not None:
+                while self.hash_table[1][index] is not None:
                     index += 1
                     if index == self.size:
                         index = 0
-                self.table[index] = key
-                self.numbers_table[index] = value
-                print("Adicionado com sucesso!")
+                self.hash_table[1][index] = key
+                self.hash_table[2][index] = value
+                print("Add completed!")
             self.total_items += 1   
             return True
    
     def search(self, key):
         index = self.hash_function(key)
         original_index = index
-        while self.table[index] is not None:
-            if self.table[index] == key:
-                print("{}, {}".format(self.table[index], self.numbers_table[index]))
-            if self.table[index + 1] == None:
+        while self.hash_table[1][index] is not None:
+            if self.hash_table[1][index] == key:
+                print("{}, {}".format(self.hash_table[1][index], self.hash_table[2][index]))
+            if self.hash_table[1][index + 1] == None:
                 return True
             index += 1
             if index == self.size:
@@ -52,25 +50,37 @@ class AgendaHeroes:
             if index == original_index:
                 return "Not in List"
         return "Not in list"
+    
+    def searchByWord(self, key):
+        index = self.hash_function(key)
+        original_index = index
+        counter = 0
+        while counter < self.size:
+            if self.hash_table[1][index] != None and self.hash_table[1][index].lower().startswith(key.lower()):
+                print("{}".format(self.hash_table[1][index]))
+            index += 1
+            counter += 1
+            if index == self.size:
+                index = 0
+        return "Not in list"
 
     def delete(self, key):
         index = self.hash_function(key)
         if index >= self.size or index < 0:
             return print("Invalid Name")
-
-        if (self.table[index] == key):
-            self.table[index] = None
-            self.numbers_table[index] = None
+        if (self.hash_table[1][index] == key):
+            self.hash_table[1][index] = None
+            self.hash_table[2][index] = None
             self.total_items -= 1
             return print("Delete completed!")
         else:
-            while self.table[index] is not None:
+            while self.hash_table[1][index] is not None:
                     index += 1
                     if index == self.size:
                         index = 0
-                    if (self.table[index] == key):
-                        self.table[index] = None
-                        self.numbers_table[index] = None
+                    if (self.hash_table[1][index] == key):
+                        self.hash_table[1][index] = None
+                        self.hash_table[2][index] = None
                         print("Delete completed!")
                         self.total_items -= 1
                         return True
@@ -87,3 +97,13 @@ class AgendaHeroes:
             self.insert(linha[0], linha[1])
             if linha[0] == "Abigail Quinn":
                 break
+
+    def showNames(self):
+        for name in self.hash_table[1]:
+            if (name != None):
+                print(name)
+
+    def showNumbers(self):
+        for number in self.hash_table[2]:
+            if (number != None):
+                print(number)
