@@ -24,6 +24,7 @@ class AgendaHeroes:
             if self.hash_table[1][index] is None:
                 self.hash_table[1][index] = key
                 self.hash_table[2][index] = value
+                self.total_items += 1
                 return print("Add completed!")
             else:
                 while self.hash_table[1][index] is not None:
@@ -53,7 +54,6 @@ class AgendaHeroes:
     
     def searchByWord(self, key):
         index = self.hash_function(key)
-        original_index = index
         counter = 0
         while counter < self.size:
             if self.hash_table[1][index] != None and self.hash_table[1][index].lower().startswith(key.lower()):
@@ -84,7 +84,6 @@ class AgendaHeroes:
                         print("Delete completed!")
                         self.total_items -= 1
                         return True
-            
         return print("Not found")
     
     def add_contacts_from_diary(self):
@@ -95,7 +94,7 @@ class AgendaHeroes:
         # Adiciona contatos até a Abigail
         for linha in reader:
             self.insert(linha[0], linha[1])
-            if linha[0] == "Abigail Quinn":
+            if linha[0] == "Henry Zimmerman":
                 break
 
     def showNames(self):
